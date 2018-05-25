@@ -33,6 +33,9 @@ class Logger {
         if (!isset($options['endLine'])) {
             $options['endLine'] = PHP_EOL;
         }        
+
+        //Create dir of the log        
+        $this->createdir(dirname($path));
             
 		//Setting
         $this->setPath($path);          
@@ -162,6 +165,22 @@ class Logger {
 
 		return round($bytes, $precision) . ' ' . $units[$pow]; 
 	} 		
+
+	public function createdir($dir,$modo=02775) {
+		if(!$dir) {
+			return;	
+		}		
+	    $salida=false;
+		if (!file_exists($dir)) {
+			if (isset($_SERVER["WINDIR"])) $salida=@mkdir($dir);//windows
+			else
+			{
+				$salida=@mkdir($dir, $modo, true);//no windows y recursivo
+				exec("chown -R www-data:www-data $dir");
+			}
+		}
+		return $salida;
+	}   
     
     function getPath() {
         return $this->path;
@@ -186,5 +205,5 @@ class Logger {
 
     function setLevel($level) {
 		$this->level = $level;
-	}	         
+	}	         		   
 }
