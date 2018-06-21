@@ -37,18 +37,22 @@ class Logger {
         //Create dir of the log        
         $this->createdir(dirname($path));
             
-		//Setting
+	//Setting
         $this->setPath($path);          
         $this->setOptions($options);                            
         $this->setLevel($level);        
         
-		//Profiling
-		$this->start_time = microtime(true);
-		$dat = getrusage();
-		define('PHP_TUSAGE', microtime(true));
-		define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
+	//Profiling
+	$this->start_time = microtime(true);
+	$dat = getrusage();
+	if (!defined('PHP_TUSAGE')) {
+	    define('PHP_TUSAGE', microtime(true));
+	}
+	if (!defined('PHP_RUSAGE')) {
+	    define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
+	}
 		
-		//Return
+	//Return
         return $path;
     }
     
